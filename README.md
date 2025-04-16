@@ -2,6 +2,10 @@
 
 A pure TypeScript utility for applying human-readable pseudo-diff patch files with partial editing capabilities powered by LLM.
 
+## Background
+
+When dealing with very long documents or code files, language models typically need to output the entire content to make changes, which is wasteful and slow for small modifications. DeePaste Partial Edit solves this problem by enabling targeted, partial edits through a patch-based approach, making the editing process much more efficient for minor changes to large files.
+
 ## Features
 
 - **Patch Processing**: Apply human-readable pseudo-diff patches to text files
@@ -147,119 +151,3 @@ DeePaste uses a human-readable patch format:
 ## License
 
 MIT
-
-# DeePaste
-
-一个纯 TypeScript 工具，用于应用人类可读的伪差异补丁文件，具有由 LLM 驱动的部分编辑功能。
-
-## 功能特性
-
-- **补丁处理**：将人类可读的伪差异补丁应用到文本文件
-- **部分编辑**：使用 LLM 进行上下文感知的代码编辑
-- **无依赖**：纯 TypeScript 实现
-- **开发者友好**：简单的集成 API
-
-## 安装
-
-```bash
-npm install @deepaste/partial-edit
-# 或
-bun add @deepaste/partial-edit
-```
-
-### CLI 使用方法
-
-你可以直接使用 bunx 运行 partial-edit CLI：
-
-```bash
-# 设置你的 OpenAI API 密钥
-export OPENAI_API_KEY=sk-proj-xxx
-
-# 直接使用 bunx 运行
-bunx @deepaste/partial-edit 文件路径.ts "为这个函数添加错误处理"
-
-# 或者全局安装
-bun install -g @deepaste/partial-edit
-partial-edit 文件路径.ts "为这个函数添加错误处理"
-```
-
-CLI 工具会：
-1. 创建原始文件的备份（带 `.old` 扩展名）
-2. 应用请求的更改
-3. 保存生成的补丁以供参考（带 `.patch` 扩展名）
-
-## 使用方法
-
-### 应用补丁
-
-```typescript
-import { processPatch } from '@deepaste/partial-edit';
-
-// 原始文件
-const files = {
-  'example.ts': 'console.log("Hello World");'
-};
-
-// 人类可读格式的补丁
-const patchText = `
-*** Begin Patch
-*** Update File: example.ts
- console.log("Hello World");
--console.log("Hello World");
-+console.log("Hello, DeePaste!");
-*** End Patch
-`;
-
-// 应用补丁
-const result = processPatch(patchText, files);
-console.log(result['example.ts']); // 'console.log("Hello, DeePaste!");'
-```
-
-### 使用 LLM 的部分编辑
-
-```typescript
-import { partialEdit } from '@deepaste/partial-edit';
-
-// 在环境中设置你的 OpenAI API 密钥
-// process.env.OPENAI_API_KEY = '你的密钥';
-
-const originalCode = `
-function sum(a: number, b: number): number {
-  return a + b;
-}
-`;
-
-async function example() {
-  const result = await partialEdit(
-    originalCode,
-    "修改函数，使其接受一个数字数组而不是两个参数"
-  );
-  
-  console.log(result.patch); // 生成的补丁
-  console.log(result.finalContent); // 编辑后的代码
-}
-```
-
-## 相关概念
-
-DeePaste 应用补丁的方式与 OpenAI 的 GPT-4.1 提示指南中讨论的技术类似。该指南提到，在代码修改任务中，同时提供需要替换的确切代码和带有明确分隔符的替换代码可以产生高成功率。像伪差异这样不依赖行号的格式对于 LLM 驱动的代码编辑特别有效。
-
-更多详情，请查看 [GPT-4.1 生成和应用文件差异的提示指南](https://cookbook.openai.com/examples/gpt4-1_prompting_guide#appendix-generating-and-applying-file-diffs)。
-
-## 开发
-
-### 发布
-
-要只发布编译后的代码：
-
-```bash
-# 构建并准备包
-bun run prepublishOnly
-
-# 发布到 npm
-bun publish
-```
-
-发布的包将只包含：
-- `dist` 目录中的编译代码
-- `bin` 目录中的 CLI 可执行文件
