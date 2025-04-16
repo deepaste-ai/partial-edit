@@ -1,4 +1,4 @@
-# DeePaste
+# DeePaste Partial Edit
 
 A pure TypeScript utility for applying human-readable pseudo-diff patch files with partial editing capabilities powered by LLM.
 
