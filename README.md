@@ -1,10 +1,14 @@
-# DeePaste Partial Edit
+# Partial Edit
 
 A pure TypeScript utility for applying human-readable pseudo-diff patch files with partial editing capabilities powered by LLM.
 
-## Background
+## Motivation
 
-When dealing with very long documents or code files, language models typically need to output the entire content to make changes, which is wasteful and slow for small modifications. DeePaste Partial Edit solves this problem by enabling targeted, partial edits through a patch-based approach, making the editing process much more efficient for minor changes to large files.
+When dealing with very long documents or code files, language models typically need to output the entire content to make changes, which is wasteful and slow for small modifications. Partial Edit solves this problem by enabling targeted, partial edits through a patch-based approach, making the editing process much more efficient for minor changes to large files.
+
+This project is a TypeScript implementation of the approach described in OpenAI's GPT-4.1 prompting guide, which demonstrates that providing both exact code to be replaced and replacement code with clear delimiters produces high success rates in code modification tasks. Partial Edit encapsulates this technique into an easy-to-use API, focusing on pseudo-diff formats that don't rely on line numbers, which are especially effective for LLM-powered code editing.
+
+For more details, see the [GPT-4.1 Prompting Guide on Generating and Applying File Diffs](https://cookbook.openai.com/examples/gpt4-1_prompting_guide#appendix-generating-and-applying-file-diffs).
 
 ## Features
 
@@ -60,13 +64,13 @@ const patchText = `
 *** Update File: example.ts
  console.log("Hello World");
 -console.log("Hello World");
-+console.log("Hello, DeePaste!");
++console.log("Hello, Partial Edit!");
 *** End Patch
 `;
 
 // Apply the patch
 const result = processPatch(patchText, files);
-console.log(result['example.ts']); // 'console.log("Hello, DeePaste!");'
+console.log(result['example.ts']); // 'console.log("Hello, Partial Edit!");'
 ```
 
 ### Partial Edit with LLM
@@ -93,12 +97,6 @@ async function example() {
   console.log(result.finalContent); // The edited code
 }
 ```
-
-## Related Concepts
-
-DeePaste's approach to applying patches is similar to techniques discussed in OpenAI's GPT-4.1 prompting guide. The guide mentions that providing both exact code to be replaced and replacement code with clear delimiters produces high success rates in code modification tasks. Formats like pseudo-diffs that don't rely on line numbers are especially effective for LLM-powered code editing.
-
-For more details, see the [GPT-4.1 Prompting Guide on Generating and Applying File Diffs](https://cookbook.openai.com/examples/gpt4-1_prompting_guide#appendix-generating-and-applying-file-diffs).
 
 ## API Reference
 
@@ -135,7 +133,7 @@ The published package will only include:
 
 ## Patch Format
 
-DeePaste uses a human-readable patch format:
+Partial Edit uses a human-readable patch format:
 
 ```
 *** Begin Patch
