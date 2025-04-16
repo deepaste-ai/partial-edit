@@ -65,6 +65,21 @@ The patch format must follow this structure:
  [context line]
 *** End Patch
 
+For multiple changes in the same file, you can use multiple sections:
+*** Begin Patch
+*** Update File: ${tempFileName}
+@@ first_context_identifier
+ [context line]
+-[line to remove]
++[line to add]
+ [context line]
+@@
+ [another context line]
+-[another line to remove]
++[another line to add]
+ [another context line]
+*** End Patch
+
 Important rules:
 1. Context lines should start with a space
 2. Lines to be removed should start with a minus sign
@@ -73,6 +88,7 @@ Important rules:
 5. Only include lines that change or provide context
 6. Don't use line numbers, rely on context to identify code
 7. Include about 3 lines of context before and after changes
+8. For multiple changes, separate them with @@ markers
 
 PLEASE ONLY GENERATE THE PATCH TEXT, NOTHING ELSE.
 `;

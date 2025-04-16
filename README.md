@@ -22,13 +22,14 @@ bun add @deepaste/partial-edit
 You can use the partial-edit CLI directly with bunx:
 
 ```bash
-# Run directly with bunx
+# Set your OpenAI API key
 export OPENAI_API_KEY=sk-proj-xxx
+
+# Run directly with bunx
 bunx @deepaste/partial-edit path/to/file.ts "Add error handling to this function"
 
 # Or install globally
 bun install -g @deepaste/partial-edit
-export OPENAI_API_KEY=sk-proj-xxx
 partial-edit path/to/file.ts "Add error handling to this function"
 ```
 
@@ -69,6 +70,9 @@ console.log(result['example.ts']); // 'console.log("Hello, DeePaste!");'
 ```typescript
 import { partialEdit } from '@deepaste/partial-edit';
 
+// Set your OpenAI API key in your environment
+// process.env.OPENAI_API_KEY = 'your-api-key';
+
 const originalCode = `
 function sum(a: number, b: number): number {
   return a + b;
@@ -106,6 +110,24 @@ For more details, see the [GPT-4.1 Prompting Guide on Generating and Applying Fi
 
 - `identifyFilesNeeded(text: string): string[]`
 - `identifyFilesAdded(text: string): string[]`
+
+## Development
+
+### Publishing
+
+To publish only the compiled code:
+
+```bash
+# Build and prepare the package
+bun run prepublishOnly
+
+# Publish to npm
+bun publish
+```
+
+The published package will only include:
+- The compiled code in the `dist` directory
+- The CLI executable in the `bin` directory
 
 ## Patch Format
 
@@ -150,6 +172,9 @@ bun add @deepaste/partial-edit
 你可以直接使用 bunx 运行 partial-edit CLI：
 
 ```bash
+# 设置你的 OpenAI API 密钥
+export OPENAI_API_KEY=sk-proj-xxx
+
 # 直接使用 bunx 运行
 bunx @deepaste/partial-edit 文件路径.ts "为这个函数添加错误处理"
 
@@ -195,6 +220,9 @@ console.log(result['example.ts']); // 'console.log("Hello, DeePaste!");'
 ```typescript
 import { partialEdit } from '@deepaste/partial-edit';
 
+// 在环境中设置你的 OpenAI API 密钥
+// process.env.OPENAI_API_KEY = '你的密钥';
+
 const originalCode = `
 function sum(a: number, b: number): number {
   return a + b;
@@ -218,36 +246,20 @@ DeePaste 应用补丁的方式与 OpenAI 的 GPT-4.1 提示指南中讨论的技
 
 更多详情，请查看 [GPT-4.1 生成和应用文件差异的提示指南](https://cookbook.openai.com/examples/gpt4-1_prompting_guide#appendix-generating-and-applying-file-diffs)。
 
-## API 参考
+## 开发
 
-### 核心函数
+### 发布
 
-- `processPatch(patchText: string, files: Record<string, string>): Record<string, string>`
-- `partialEdit(originalContent: string, task: string): Promise<{ patch: string; finalContent: string }>`
-- `textToPatch(text: string, orig: Record<string, string>): [Patch, number]`
-- `patchToCommit(patch: Patch, orig: Record<string, string>): Commit`
-- `applyCommit(commit: Commit): Record<string, string>`
+要只发布编译后的代码：
 
-### 工具函数
+```bash
+# 构建并准备包
+bun run prepublishOnly
 
-- `identifyFilesNeeded(text: string): string[]`
-- `identifyFilesAdded(text: string): string[]`
-
-## 补丁格式
-
-DeePaste 使用人类可读的补丁格式：
-
-```
-*** Begin Patch
-*** Update File: path/to/file.ext
-@@ context_identifier (可选)
- [上下文行]
--[要删除的行]
-+[要添加的行]
- [上下文行]
-*** End Patch
+# 发布到 npm
+bun publish
 ```
 
-## 许可证
-
-MIT
+发布的包将只包含：
+- `dist` 目录中的编译代码
+- `bin` 目录中的 CLI 可执行文件

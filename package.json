@@ -1,15 +1,22 @@
 {
   "name": "@deepaste/partial-edit",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "description": "A pure TypeScript utility for applying human-readable pseudo-diff patch files",
-  "main": "lib/index.ts",
-  "module": "lib/index.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
-    "partial-edit": "./examples/partial-edit-cli-demo/partial-edit-cli.ts"
+    "partial-edit": "./bin/partial-edit.js"
   },
+  "files": [
+    "dist",
+    "bin"
+  ],
   "scripts": {
     "test": "bun test",
-    "build": "bun build ./lib/index.ts --outdir ./dist",
+    "build": "bun build ./lib/index.ts --outdir ./dist --target node --external '@langchain/core' --external '@langchain/openai' --external 'langchain' --external 'zod'",
+    "build-cli": "mkdir -p bin && bun build examples/partial-edit-cli-demo/partial-edit-cli.ts --outfile bin/partial-edit.js --target node --external '@langchain/core' --external '@langchain/openai' --external 'langchain' --external 'zod'",
+    "prepublishOnly": "bun run build && bun run build-cli",
     "partial-edit": "bun examples/partial-edit-cli-demo/partial-edit-cli.ts"
   },
   "keywords": [
